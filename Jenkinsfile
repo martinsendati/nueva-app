@@ -1,7 +1,7 @@
 pipeline {
 
     environment {
-        APP_NAME = "web-de-martin"
+        APP_NAME = "nueva-app"
         APP_TAG = "${BUILD_NUMBER}"
         REGISTRY = "martooo"
         PASS = "arquitectura123"
@@ -57,7 +57,7 @@ spec:
 
         stage('Clonar repo de aplicacion') {
             steps { 
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/martinsendati/repo-de-aplicacion.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/martinsendati/nueva-app.git'
             }
         }        
          stage('buildear imagen') {
@@ -74,12 +74,12 @@ spec:
         }
         stage("clonar repo de infraestructura") {
           steps { 
-              git branch: 'main', changelog: false, poll: false, url: 'https://github.com/martinsendati/repo-de-infraestructura.git'
+              git branch: 'main', changelog: false, poll: false, url: 'https://github.com/martinsendati/nueva-app.git'
           }
         }
         stage("modificar deploy") {
           steps {
-            sh "sed -i s/web-de-martin:.*/web-de-martin:$APP_TAG/g dev/deployment.yaml"
+            sh "sed -i s/nueva-app:.*/nueva-app:$APP_TAG/g dev/deployment.yaml"
           }
         }
         stage("pushear cambios") {
@@ -89,7 +89,7 @@ spec:
             sh "git config --global user.name 'martinsendati'"
             sh "git commit -m 'cambio de version'"    
             withCredentials([usernamePassword(credentialsId: "credenciales-github", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/martinsendati/repo-de-infraestructura.git')
+                sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/martinsendati/nueva-app.git')
             }   
            
 
